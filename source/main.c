@@ -39,10 +39,21 @@ main(void)
 
   SetTargetFPS(60);
 
-  Font f = LoadFont("Resources/font/JetBrainsMono-Regular.ttf");
-  imui.font = &f;
-  imui.font->baseSize = 30;
+  unsigned int fileSize = 0;
+  unsigned char *fileData = LoadFileData("Resources/font/JetBrainsMono-Regular.ttf", &fileSize);
+  int fontSize = 128;
+
+  imui.font = (Font*)malloc(sizeof(Font));
+  imui.font->baseSize = fontSize;
   imui.font->glyphCount = 95;
+
+  imui.font->glyphs = LoadFontData(fileData, fileSize, fontSize, 0, 0, FONT_SDF);
+  Image atlas = GenImageFontAtlas(imui.font->glyphs, &imui.font->recs, imui.font->glyphCount, fontSize, 0, 1);
+  imui.font->texture = LoadTextureFromImage(atlas);
+
+  UnloadImage(atlas);
+  UnloadFileData(fileData);
+  SetTextureFilter(imui.font->texture, TEXTURE_FILTER_BILINEAR);
 
   while (!WindowShouldClose()) {
     BeginDrawing();
@@ -52,8 +63,8 @@ main(void)
     DrawTextEx(*imui.font,
                "Press TAB to toggle the console",
                (Vector2){ 20.0f, 20.0f },
-               imui.font->baseSize,
-               2,
+               20.0f,
+               1.0f,
                GRAY);
 
     DK_ConsoleUpdate(&console, &imui);
