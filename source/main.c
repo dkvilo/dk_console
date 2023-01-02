@@ -5,20 +5,62 @@
 #include "raylib.h"
 #include "raymath.h"
 #include <string.h>
+#include <time.h>
 
 #define DK_CONSOLE_IMPLEMENTATION
 #include "dk_console.h"
 
-#define LOG_SIZE 1024 * 1024
 static Console console = { .toggle_key = KEY_TAB };
+static Console* console_global_ptr = NULL;
 
-// Custom log function to send logs to the console
-void
-CustomLog(int msgType, const char* text, va_list args)
+void CustomLog(int msgType, const char *text, va_list args)
+  {
+    static char buffer[1024] = {0};
+
+    char timeStr[64] = {0};
+    time_t now = time(NULL);
+    struct tm *tm_info = localtime(&now);
+
+    strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tm_info);
+    vsprintf(buffer, text, args);
+
+    char *finalBuffer = (char *)malloc(1024);
+    memset(finalBuffer, 0, 1024);
+    sprintf(finalBuffer, "%s %s", timeStr, buffer);
+
+    const char *msgTypeStr = "Unknown";
+    switch (msgType)
+    {
+    case 3:
+      msgTypeStr = "(Info)";
+      break;
+    case 4:
+      msgTypeStr = "(Warning)";
+      break;
+    case 5:
+      msgTypeStr = "(Error)";
+      break;
+    case 6:
+      msgTypeStr = "(Fatal)";
+      break;
+    }
+
+    char *finalBuffer2 = (char *)malloc(1024);
+    memset(finalBuffer2, 0, 1024);
+    sprintf(finalBuffer2, "%s %s", msgTypeStr, finalBuffer);
+
+    free(finalBuffer);
+
+    if (console_global_ptr != NULL)
+    {
+      console_global_ptr->logs[console_global_ptr->log_index++] = (Log){.text = finalBuffer2, .type = msgType};
+    }
+  }
+
+
+void console_handler(char *command)
 {
-  char buffer[1024] = { 0 };
-  vsprintf(buffer, text, args);
-  strcpy(console.logs[++console.log_index].text, buffer);
+  CustomLog(LOG_INFO, command, NULL);
 }
 
 int
@@ -34,7 +76,9 @@ main(void)
   const int screenWidth = 1280;
   const int screenHeight = 720;
 
-  DK_ConsoleInit(&console, LOG_SIZE);
+  console_global_ptr = &console;
+
+  DK_ConsoleInit(console_global_ptr, LOG_SIZE);
   InitWindow(screenWidth, screenHeight, "Dev Console");
 
   SetTargetFPS(60);
@@ -67,7 +111,7 @@ main(void)
                1.0f,
                GRAY);
 
-    DK_ConsoleUpdate(&console, &imui);
+    DK_ConsoleUpdate(console_global_ptr, &imui, console_handler);
 
     EndDrawing();
   }
