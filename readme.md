@@ -2,11 +2,7 @@
 
 DK Console is a super simple drop in dev console for your raylib game/engine.
 
-## Building Examples
-
-```bash
-  make && ./console
-```
+[DEMO VIDEO](https://www.youtube.com/watch?v=c6IXiEBWHXk)
 
 <img src="https://github.com/dkvilo/dk_console/blob/master/Resources/prev.png" />
 
