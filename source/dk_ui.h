@@ -377,7 +377,6 @@ extern "C"
   {
     Color bgColor = Fade(io->theme->background, 0.2);
     Color borderColor = Fade(io->theme->border, 0.5);
-    Color textColor = Fade(io->theme->text, 0.8);
     Color sliderColor = Fade(io->theme->slider, 0.8);
     Color sliderColorHover = Fade(io->theme->sliderCursorHover, 0.9);
 
@@ -444,9 +443,7 @@ extern "C"
     Color borderColor = Fade(io->theme->border, 0.5);
     Color textColor = Fade(io->theme->text, 0.8);
     Color hoverColor = Fade(io->theme->buttonHover, 0.8);
-    Color activeColor = Fade(io->theme->buttonActive, 0.8);
 
-    Rectangle button = { position.x, position.y, width, height };
     Rectangle buttonBounds = { position.x, position.y, width, height };
 
     DrawRectangleRoundedLines(buttonBounds, 0.5f, 1, 2, borderColor); // outline
@@ -455,10 +452,6 @@ extern "C"
     if (CheckCollisionPointRec(GetMousePosition(), buttonBounds)) {
       DrawRectangleRounded(buttonBounds, 0.5f, 10, hoverColor); // bg
     }
-
-    Vector2 textSize = MeasureTextEx(*io->font, text, height, 1);
-    Vector2 textPos = { position.x + width / 2 - textSize.x / 2,
-                        position.y + height / 2 - textSize.y / 2 };
 
     DrawTextEx(*io->font, text, position, height, 1, textColor);
 
@@ -485,13 +478,11 @@ extern "C"
     Color borderColor = Fade(io->theme->border, 0.5);
     Color textColor = Fade(io->theme->text, 0.8);
     Color hoverColor = Fade(io->theme->buttonHover, 0.8);
-    Color activeColor = Fade(io->theme->buttonActive, 0.8);
 
     Color optionTextColor = Fade(io->theme->optionText, 0.8);
     Color optionHoverColor = Fade(io->theme->optionHover, 0.8);
     Color optionbgColor = Fade(io->theme->optionBackground, 0.8);
 
-    Rectangle button = { position.x, position.y, width, height };
     Rectangle buttonBounds = { position.x, position.y, width, height };
 
     DrawRectangleRoundedLines(buttonBounds, 0.5f, 1, 2, borderColor); // outline
@@ -519,9 +510,6 @@ extern "C"
       // Draw dropdown options
       for (int i = 0; i < el_size; i++) {
         int offset = i + 1;
-        Rectangle option = {
-          position.x, position.y + height * (i + 1), width, height
-        };
         Rectangle optionBounds = {
           position.x, position.y + height * (i + 1) + offset, width, height
         };
@@ -572,17 +560,13 @@ extern "C"
     Color bgColor = Fade(io->theme->background, 0.2);
     Color borderColor = Fade(io->theme->border, 0.5);
     Color textColor = Fade(io->theme->text, 0.8);
-    Color hoverColor = Fade(io->theme->buttonHover, 0.8);
     Color activeColor = Fade(io->theme->buttonActive, 0.8);
     Color cursorColor = Fade(io->theme->textFiledCursor, 0.8);
     Color selectionColor = Fade(io->theme->textFiledSelection, 0.2);
 
-    Rectangle button = { position.x, position.y, width, height };
     Rectangle buttonBounds = { position.x, position.y, width, height };
 
-    static int cursorStartPos = 0;
     static int cursorPosEnd = 0;
-
     static int framesCounter = 0;
     static int cursorOffset = 0;
 
