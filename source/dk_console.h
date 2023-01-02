@@ -164,7 +164,7 @@ extern "C"
         if (IsKeyPressed(KEY_ENTER)) {
           if (strlen(text) > 0) {
             strcpy(console->logs[console->log_index++].text, text);
-            stpcpy(text, "");
+            strcpy(text, "");
             if (console->log_index >= LOG_SIZE) {
               console->log_index = 0;
             }
