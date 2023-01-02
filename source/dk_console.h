@@ -15,7 +15,9 @@ extern "C"
 #define DK_UI_IMPLEMENTATION
 #include "dk_ui.h"
 
-#define LOG_SIZE 1024 * 1024
+#if !defined(LOG_SIZE)
+#define LOG_SIZE 1080 * 1080
+#endif
 
   typedef struct
   {
@@ -35,14 +37,16 @@ extern "C"
 
   void DK_ConsoleInit(Console* console, int log_size);
 
-  void DK_ConsoleUpdate(Console* console, ImUI* imui);
+  void DK_ConsoleUpdate(Console* console, ImUI* imui, void (*callback)(char*));
 
 #if defined(DK_CONSOLE_IMPLEMENTATION)
   void DK_ConsoleInit(Console* console, int log_size)
   {
     console->ui = (Rectangle){ 0.0f, 0.0f, 0.0f, 0.0f };
+    console->ui.height = GetScreenHeight();
     console->is_open = false;
     console->log_index = 0;
+    console->scroll = 0;
     console->logs = (Log*)malloc(sizeof(Log) * log_size);
     for (int i = 0; i < log_size; i++) {
       console->logs[i].text = (char*)malloc(1024);
@@ -50,7 +54,7 @@ extern "C"
     }
   }
 
-  void DK_ConsoleUpdate(Console* console, ImUI* imui)
+  void DK_ConsoleUpdate(Console* console, ImUI* imui, void (*callback)(char*))
   {
 
     if (IsKeyPressed(console->toggle_key)) {
@@ -60,21 +64,15 @@ extern "C"
     static bool focused = false;
 
     if (console->is_open) {
-      console->ui.height =
-        Clamp(Lerp(console->ui.height, GetScreenHeight(), 0.5f),
-              0.0f,
-              GetScreenHeight());
+      console->ui.height = Clamp(Lerp(console->ui.height, GetScreenHeight(), 0.5f), 0.0f, GetScreenHeight());
       focused = true;
     } else {
       console->ui.height = Lerp(console->ui.height, 0.0f, 0.5f);
     }
 
     // Console Background
-    DrawRectangle(0,
-                  0,
-                  GetScreenWidth(),
-                  console->ui.height,
-                  Fade(imui->theme->background, 0.8f));
+    DrawRectangle(0, 0, GetScreenWidth(), console->ui.height, Fade(imui->theme->background, 1.0f));
+
     if (console->is_open) {
 
       if (console->is_open) {
@@ -132,42 +130,53 @@ extern "C"
           0.0f, 0.0f, (float)GetScreenWidth(), console->ui.height
         };
 
-        if (CheckCollisionPointRec(GetMousePosition(), DrawingTextArea)) {
+        int scroll_step = 1;
+        int min_scroll_val = 0;
+
+        if (focused) {
           if (IsKeyDown(KEY_DOWN)) {
-            console->scroll += 1;
+            console->scroll += scroll_step;
           } else if (IsKeyDown(KEY_UP)) {
-            console->scroll -= 1;
+            console->scroll -= scroll_step;
           }
-          console->scroll = Clamp(console->scroll, 0, console->log_index);
         }
 
+        if (CheckCollisionPointRec(GetMousePosition(), DrawingTextArea)) {
+          if (GetMouseWheelMove() > 0) {
+            console->scroll += scroll_step;
+          } else if (GetMouseWheelMove() < 0) {
+            console->scroll -= scroll_step;
+          }
+        }
+
+        console->scroll = Clamp(console->scroll, min_scroll_val, console->log_index);
+
         static int scroll_offset = 0;
-        scroll_offset = ((console->log_index - console->scroll) * 30);
-        scroll_offset =
-          Clamp((float)scroll_offset,
-                0.0f,
-                (console->log_index * 30) - (console->ui.height - 30));
+        int real_scroll = ((console->log_index - console->scroll) * 30);
+
+        scroll_offset = real_scroll;
+        scroll_offset = Clamp((float)scroll_offset, 0.0f, (console->log_index * 30.0f) - (console->ui.height - 30.0f));
+
+        // define colors array based on log type
+        Color colors[4] = {
+          GRAY, // info
+          ORANGE, // warning
+          RED, // error
+          imui->theme->text, // Debug
+        };
 
         for (int i = 0; i < console->log_index; i++) {
           Vector2 pos = { 10, 0 - scroll_offset + (float)i * 30 };
-          if (pos.y > console->ui.height - 45)
-            break;
-          DrawTextEx(
-            *imui->font, console->logs[i].text, pos, 20, 1, imui->theme->text);
-        }
+          if (pos.y > console->ui.height - 45) break;
 
-        static char text[1024] = "";
-        Vector2 input_pos = { 0.0f, console->ui.height - 31.0f };
-        DK_DrawInputField(
-          imui, input_pos, GetScreenWidth(), 30, text, &focused, NULL);
-
-        if (IsKeyPressed(KEY_ENTER)) {
-          if (strlen(text) > 0) {
-            strcpy(console->logs[console->log_index++].text, text);
-            strcpy(text, "");
-            if (console->log_index >= LOG_SIZE) {
-              console->log_index = 0;
-            }
+          if (console->logs[i].type == LOG_INFO) {
+            DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[0]);
+          } else if (console->logs[i].type == LOG_WARNING) {
+            DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[1]);
+          } else if (console->logs[i].type == LOG_ERROR) {
+            DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[2]);
+          } else if (console->logs[i].type == LOG_DEBUG) {
+            DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[3]);
           }
         }
 
@@ -181,12 +190,29 @@ extern "C"
         scrollbar_height = Clamp(scrollbar_height, 30, scrollbar_height);
         scrollbar.height = scrollbar_height;
 
+        #if 0
         // Scrollbar wheel
-        DrawRectangle(scrollbar.x,
-                      scroll_offset,
-                      scrollbar.width,
-                      scrollbar.height,
-                      Fade(imui->theme->background, 0.5f));
+        DrawRectangle(scrollbar.x, scroll_offset, scrollbar.width, scrollbar.height,Fade(imui->theme->background, 0.5f));
+        #endif
+
+        static char text[1024] = "";
+        Vector2 input_pos = { 0.0f, console->ui.height - 31.0f };
+        DK_DrawInputField(imui, input_pos, GetScreenWidth(), 30, text, &focused, NULL);
+
+        if (IsKeyPressed(KEY_ENTER)) {
+          if (strlen(text) > 0) {
+            if (console->log_index >= LOG_SIZE) {
+              console->log_index = 0;
+            }
+
+            if (callback != NULL) {
+              callback(text);
+            }
+
+            strcpy(text, "");
+          }
+        }
+
       }
     }
   }
