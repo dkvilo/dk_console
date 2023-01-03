@@ -511,7 +511,10 @@ extern "C"
       for (int i = 0; i < el_size; i++) {
         int offset = i + 1;
         Rectangle optionBounds = {
-          position.x, position.y + height * (i + 1) + offset, width, height
+          position.x,
+          position.y + height * offset,
+          width,
+          height
         };
 
         DrawRectangle(optionBounds.x,
