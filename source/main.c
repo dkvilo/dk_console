@@ -6,6 +6,7 @@
 #include "raymath.h"
 #include <string.h>
 #include <time.h>
+#include <assert.h>
 
 #define DK_CONSOLE_IMPLEMENTATION
 #include "dk_console.h"
@@ -16,6 +17,7 @@ static Console* console_global_ptr = NULL;
 void
 CustomLog(int msgType, const char* text, va_list args)
 {
+  assert(console_global_ptr != NULL);
   static char buffer[1024] = { 0 };
 
   char timeStr[64] = { 0 };
