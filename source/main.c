@@ -13,24 +13,24 @@
 static Console console = { .toggle_key = KEY_TAB };
 static Console* console_global_ptr = NULL;
 
-void CustomLog(int msgType, const char *text, va_list args)
-  {
-    static char buffer[1024] = {0};
+void
+CustomLog(int msgType, const char* text, va_list args)
+{
+  static char buffer[1024] = { 0 };
 
-    char timeStr[64] = {0};
-    time_t now = time(NULL);
-    struct tm *tm_info = localtime(&now);
+  char timeStr[64] = { 0 };
+  time_t now = time(NULL);
+  struct tm* tm_info = localtime(&now);
 
-    strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tm_info);
-    vsprintf(buffer, text, args);
+  strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", tm_info);
+  vsprintf(buffer, text, args);
 
-    char *finalBuffer = (char *)malloc(1024);
-    memset(finalBuffer, 0, 1024);
-    sprintf(finalBuffer, "%s %s", timeStr, buffer);
+  char* finalBuffer = (char*)malloc(1024);
+  memset(finalBuffer, 0, 1024);
+  sprintf(finalBuffer, "%s %s", timeStr, buffer);
 
-    const char *msgTypeStr = "Unknown";
-    switch (msgType)
-    {
+  const char* msgTypeStr = "Unknown";
+  switch (msgType) {
     case 3:
       msgTypeStr = "(Info)";
       break;
@@ -43,22 +43,22 @@ void CustomLog(int msgType, const char *text, va_list args)
     case 6:
       msgTypeStr = "(Fatal)";
       break;
-    }
-
-    char *finalBuffer2 = (char *)malloc(1024);
-    memset(finalBuffer2, 0, 1024);
-    sprintf(finalBuffer2, "%s %s", msgTypeStr, finalBuffer);
-
-    free(finalBuffer);
-
-    if (console_global_ptr != NULL)
-    {
-      console_global_ptr->logs[console_global_ptr->log_index++] = (Log){.text = finalBuffer2, .type = msgType};
-    }
   }
 
+  char* finalBuffer2 = (char*)malloc(1024);
+  memset(finalBuffer2, 0, 1024);
+  sprintf(finalBuffer2, "%s %s", msgTypeStr, finalBuffer);
 
-void console_handler(char *command)
+  free(finalBuffer);
+
+  if (console_global_ptr != NULL) {
+    console_global_ptr->logs[console_global_ptr->log_index++] =
+      (Log){ .text = finalBuffer2, .type = msgType };
+  }
+}
+
+void
+console_handler(char* command)
 {
   CustomLog(LOG_INFO, command, NULL);
 }
@@ -84,15 +84,18 @@ main(void)
   SetTargetFPS(60);
 
   unsigned int fileSize = 0;
-  unsigned char *fileData = LoadFileData("Resources/font/JetBrainsMono-Regular.ttf", &fileSize);
+  unsigned char* fileData =
+    LoadFileData("Resources/font/JetBrainsMono-Regular.ttf", &fileSize);
   int fontSize = 128;
 
   imui.font = (Font*)malloc(sizeof(Font));
   imui.font->baseSize = fontSize;
   imui.font->glyphCount = 95;
 
-  imui.font->glyphs = LoadFontData(fileData, fileSize, fontSize, 0, 0, FONT_SDF);
-  Image atlas = GenImageFontAtlas(imui.font->glyphs, &imui.font->recs, imui.font->glyphCount, fontSize, 0, 1);
+  imui.font->glyphs =
+    LoadFontData(fileData, fileSize, fontSize, 0, 0, FONT_SDF);
+  Image atlas = GenImageFontAtlas(
+    imui.font->glyphs, &imui.font->recs, imui.font->glyphCount, fontSize, 0, 1);
   imui.font->texture = LoadTextureFromImage(atlas);
 
   UnloadImage(atlas);
