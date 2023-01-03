@@ -703,7 +703,7 @@ extern "C"
 
       // (CTRL+V)
       if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_V)) {
-        strcpy(text, GetClipboardText());
+        strcat(text, GetClipboardText());
       }
 
       if (IsKeyPressed(KEY_ENTER)) {
