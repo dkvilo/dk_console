@@ -11,6 +11,9 @@
 #define DK_CONSOLE_IMPLEMENTATION
 #include "dk_console.h"
 
+#define DK_CONSOLE_EXT_COMMAND_IMPLEMENTATION
+#include "dk_command.h"
+
 static Console console = { .toggle_key = KEY_TAB };
 static Console* console_global_ptr = NULL;
 
@@ -33,6 +36,9 @@ CustomLog(int msgType, const char* text, va_list args)
 
   const char* msgTypeStr = "Unknown";
   switch (msgType) {
+    case 2:
+      msgTypeStr = "(Debug)";
+      break;
     case 3:
       msgTypeStr = "(Info)";
       break;
@@ -59,10 +65,74 @@ CustomLog(int msgType, const char* text, va_list args)
   }
 }
 
+void echo(char* argv)
+{
+  CustomLog(LOG_INFO, argv, NULL);
+}
+
+void clear(char* argv)
+{
+  DK_ConsoleClear(console_global_ptr);
+}
+
+void help(char* args)
+{
+  DK_ExtCommand* command_list = DK_ExtGetCommandsList();
+  if (args != NULL && strlen(args) > 0) {
+    for (int i = 0; i < DK_COMMAND_SIZE; i++)
+    {
+      if (command_list[i].name != NULL)
+      {
+        if (strcmp(command_list[i].name, args) == 0)
+        {
+          CustomLog(LOG_INFO, TextFormat("\t\t`%s`\t\t%s\n", command_list[i].name, command_list[i].help), NULL);
+          if (command_list[i].argc > 0) {
+            CustomLog(LOG_INFO, TextFormat("\t\ttakes %d argument(s)\n", command_list[i].argc), NULL);
+          }
+          break;
+        }
+      }
+    }
+    return;
+  } else {
+    CustomLog(LOG_INFO, "******************** HELP ********************", NULL);
+    for (int i = 0; i < DK_COMMAND_SIZE; i++)
+    {
+      if (command_list[i].name != NULL)
+      {
+        CustomLog(LOG_INFO, TextFormat("\t\t`%s`\t\t%s\n", command_list[i].name, command_list[i].help), NULL);
+        if (command_list[i].argc > 0) {
+          CustomLog(LOG_INFO, TextFormat("\t\ttakes %d argument(s)\n", command_list[i].argc), NULL);
+        }
+        CustomLog(LOG_INFO, "----------------------------------------------", NULL);
+      }
+    }
+  }
+}
+
 void
 console_handler(char* command)
 {
-  CustomLog(LOG_INFO, command, NULL);
+
+  char* command_buff = (char*)malloc(strlen(command) + 1);
+  strcpy(command_buff, command);
+  command_buff[strlen(command)] = '\0';
+
+  char* token = strtok(command_buff, " ");
+
+  char* message_buff = (char*)malloc(strlen(command) + 1);
+  strcpy(message_buff, command);
+  message_buff[strlen(command)] = '\0';
+
+  char* message = strstr(message_buff, token) + strlen(token);
+  while (*message == ' ') { message++; }
+
+  if (!DK_ExtCommandExecute(token, message)) {
+    CustomLog(LOG_ERROR, TextFormat("Unknown command `%s`", command), NULL);
+  }
+
+  free(command_buff);
+  free(message_buff);
 }
 
 int
@@ -70,6 +140,11 @@ main(void)
 {
 
   SetTraceLogCallback(CustomLog);
+
+  DK_ExtCommandInit();
+  DK_ExtCommandPush("echo", 1, "Prints a provided message in the console `echo Hello World`", &echo);
+  DK_ExtCommandPush("clear", 0, "Clears the console buffer", &clear);
+  DK_ExtCommandPush("help", 1, "Shows the available commands and/or specific one `help <command_name>`", &help);
 
   static ImUI imui;
   imui.theme = &DK_ImUISolarizedTheme;
