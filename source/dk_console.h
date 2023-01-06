@@ -170,10 +170,10 @@ extern "C"
 
       // Colors array based on log type
       Color colors[4] = {
-        GRAY,              // info
+        GRAY,              // debug
         ORANGE,            // warning
         RED,               // error
-        imui->theme->text, // Debug
+        imui->theme->text, // info
       };
 
       for (int i = 0; i < console->log_index; i++) {
@@ -181,13 +181,13 @@ extern "C"
         if (pos.y > console->ui.height - 45)
           break;
         if (console->logs[i].type == LOG_INFO) {
-          DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[0]);
+          DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[3]);
         } else if (console->logs[i].type == LOG_WARNING) {
           DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[1]);
         } else if (console->logs[i].type == LOG_ERROR) {
           DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[2]);
         } else if (console->logs[i].type == LOG_DEBUG) {
-          DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[3]);
+          DrawTextEx(*imui->font, console->logs[i].text, pos, 20, 1, colors[0]);
         }
       }
 
@@ -210,6 +210,12 @@ extern "C"
         }
       }
     }
+  }
+
+  void DK_ConsoleClear(Console* console)
+  {
+    console->log_index = 0;
+    console->scroll = 0;
   }
 #endif
 
