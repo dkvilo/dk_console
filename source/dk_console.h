@@ -16,7 +16,7 @@ extern "C"
 #include "dk_ui.h"
 
 #if !defined(LOG_SIZE)
-#define LOG_SIZE 1080 * 1080
+#define LOG_SIZE 1080 * 1080 // size of log buffer
 #endif
 
   typedef struct
@@ -37,7 +37,9 @@ extern "C"
 
   void DK_ConsoleInit(Console* console, int log_size);
 
-  void DK_ConsoleUpdate(Console* console, ImUI* imui, void (*callback)(char*));
+  void DK_ConsoleUpdate(Console* console, ImUI* imui, void (*callback)(const char*));
+
+  void DK_ConsoleShutdown(Console* console, int log_size);
 
 #if defined(DK_CONSOLE_IMPLEMENTATION)
   void DK_ConsoleInit(Console* console, int log_size)
@@ -54,7 +56,7 @@ extern "C"
     }
   }
 
-  void DK_ConsoleUpdate(Console* console, ImUI* imui, void (*callback)(char*))
+  void DK_ConsoleUpdate(Console* console, ImUI* imui, void (*callback)(const char*))
   {
 
     if (IsKeyPressed(console->toggle_key)) {
@@ -193,8 +195,7 @@ extern "C"
 
       static char text[1024] = "";
       Vector2 input_pos = { 0.0f, console->ui.height - 31.0f };
-      DK_DrawInputField(
-        imui, input_pos, GetScreenWidth(), 30, text, &focused, NULL);
+      DK_DrawInputField(imui, input_pos, GetScreenWidth(), 30, text, &focused, NULL);
 
       if (IsKeyPressed(KEY_ENTER)) {
         if (strlen(text) > 0) {
@@ -217,6 +218,14 @@ extern "C"
     console->log_index = 0;
     console->scroll = 0;
   }
+
+  void DK_ConsoleShutdown(Console* console, int log_size) {
+    for (int i = 0; i < log_size; i++) {
+      free(console->logs[i].text);
+    }
+    free(console->logs);
+  }
+
 #endif
 
 #if defined(__cplusplus)

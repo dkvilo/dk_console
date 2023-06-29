@@ -57,151 +57,193 @@ extern "C"
   } ImUI;
 
   static ImUIStyle DK_ImUIDefaultStyle = {
-    1,    // borderSize
-    0.0f, // rounding
+    .borderSize =         1,
+    .roundness  =       0.0f,
   };
 
+  // @Default theme (dark)
   static ImUITheme DK_ImUIDefaultTheme = {
-    { 50, 50, 50, 255 },    // background
-    { 255, 255, 255, 255 }, // text
-    { 50, 50, 50, 255 },    // button
-    { 60, 60, 60, 255 },    // buttonHover
-    { 60, 60, 60, 255 },    // buttonActive
-    { 60, 60, 60, 255 },    // toggle
-    { 70, 70, 70, 255 },    // toggleHover
-    { 80, 80, 80, 255 },    // toggleCursor
-    { 60, 60, 60, 255 },    // select
-    { 60, 60, 60, 255 },    // selectActive
-    { 50, 50, 50, 255 },    // slider
-    { 80, 80, 80, 255 },    // sliderCursor
-    { 80, 80, 80, 255 },    // sliderCursorHover
-    { 80, 80, 80, 255 },    // sliderCursorActive
-    { 50, 50, 50, 255 },    // property
-    { 60, 60, 60, 255 },    // border
-    { 0, 228, 48, 255 },    // textFiledCursor
-    { 0, 117, 44, 255 },    // textFiledSelection
-    { 255, 255, 255, 255 }, // optionText
-    { 50, 50, 50, 255 },    // optionBackground
-    { 60, 60, 60, 255 },    // optionHover
+   .background =           { 50, 50, 50, 255 },
+   .text =                 { 255, 255, 255, 255 },
+   .button =               { 50, 50, 50, 255 },
+   .buttonHover =          { 60, 60, 60, 255 },
+   .buttonActive =         { 60, 60, 60, 255 },
+   .toggle =               { 60, 60, 60, 255 },
+   .toggleHover =          { 70, 70, 70, 255 },
+   .toggleCursor =         { 80, 80, 80, 255 },
+   .select =               { 60, 60, 60, 255 },
+   .selectActive =         { 60, 60, 60, 255 },
+   .slider =               { 50, 50, 50, 255 },
+   .sliderCursor =         { 80, 80, 80, 255 },
+   .sliderCursorHover =    { 80, 80, 80, 255 },
+   .sliderCursorActive =   { 80, 80, 80, 255 },
+   .property =             { 50, 50, 50, 255 },
+   .border =               { 60, 60, 60, 255 },
+   .textFiledCursor =      { 0, 228, 48, 255 },
+   .textFiledSelection =   { 0, 117, 44, 255 },
+   .optionText =           { 255, 255, 255, 255 },
+   .optionBackground =     { 50, 50, 50, 255 },
+   .optionHover =          { 60, 60, 60, 255 },
   };
 
+  // @Solarized theme
   static ImUITheme DK_ImUISolarizedTheme = {
-    { 0, 43, 54, 255 },     // background
-    { 131, 148, 150, 255 }, // text
-    { 7, 54, 66, 255 },     // button
-    { 88, 110, 117, 255 },  // buttonHover
-    { 88, 110, 117, 255 },  // buttonActive
-    { 7, 54, 66, 255 },     // toggle
-    { 88, 110, 117, 255 },  // toggleHover
-    { 101, 123, 131, 255 }, // toggleCursor
-    { 7, 54, 66, 255 },     // select
-    { 88, 110, 117, 255 },  // selectActive
-    { 7, 54, 66, 255 },     // slider
-    { 101, 123, 131, 255 }, // sliderCursor
-    { 88, 110, 117, 255 },  // sliderCursorHover
-    { 101, 123, 131, 255 }, // sliderCursorActive
-    { 7, 54, 66, 255 },     // property
-    { 101, 123, 131, 255 }, // border,
-    { 0, 228, 48, 255 },    // textFiledCursor
-    { 0, 0, 0, 100 },       //
-    { 131, 148, 150, 255 }, // optionText
-    { 7, 54, 66, 255 },     // optionBackground
-    { 88, 110, 117, 255 },  // optionHover
+   .background =           { 0, 43, 54, 255 },
+   .text =                 { 131, 148, 150, 255 },
+   .button =               { 7, 54, 66, 255 },
+   .buttonHover =          { 88, 110, 117, 255 },
+   .buttonActive =         { 88, 110, 117, 255 },
+   .toggle =               { 7, 54, 66, 255 },
+   .toggleHover =          { 88, 110, 117, 255 },
+   .toggleCursor =         { 101, 123, 131, 255 },
+   .select =               { 7, 54, 66, 255 },
+   .selectActive =         { 88, 110, 117, 255 },
+   .slider =               { 7, 54, 66, 255 },
+   .sliderCursor =         { 101, 123, 131, 255 },
+   .sliderCursorHover =    { 88, 110, 117, 255 },
+   .sliderCursorActive =   { 101, 123, 131, 255 },
+   .property =             { 7, 54, 66, 255 },
+   .border =               { 101, 123, 131, 255 },
+   .textFiledCursor =      { 0, 228, 48, 255 },
+   .textFiledSelection =   { 0, 0, 0, 100 },
+   .optionText =           { 131, 148, 150, 255 },
+   .optionBackground =     { 7, 54, 66, 255 },
+   .optionHover =          { 88, 110, 117, 255 },
   };
 
+  // @Light theme
   static ImUITheme DK_ImUILightTheme = {
-    { 210, 210, 210, 255 }, { 50, 50, 50, 255 },    { 200, 200, 200, 255 },
-    { 175, 175, 175, 255 }, { 175, 175, 175, 255 }, { 200, 200, 200, 255 },
-    { 175, 175, 175, 255 }, { 50, 50, 50, 255 },    { 200, 200, 200, 255 },
-    { 175, 175, 175, 255 }, { 200, 200, 200, 255 }, { 50, 50, 50, 255 },
-    { 50, 50, 50, 255 },    { 50, 50, 50, 255 },    { 200, 200, 200, 255 },
-    { 175, 175, 175, 255 }, { 0, 228, 48, 255 }, // textFiledCursor
-    { 0, 117, 44, 255 },                         // textFiledSelection
-    { 200, 200, 200, 255 }, { 175, 175, 175, 255 }, { 50, 50, 50, 255 },
+    .background =           { 210, 210, 210, 255 },
+    .text =                 { 50, 50, 50, 255 },
+    .button =               { 200, 200, 200, 255 },
+    .buttonHover =          { 175, 175, 175, 255 },
+    .buttonActive =         { 175, 175, 175, 255 },
+    .toggle =               { 200, 200, 200, 255 },
+    .toggleHover =          { 175, 175, 175, 255 },
+    .toggleCursor =         { 50, 50, 50, 255 },
+    .select =               { 200, 200, 200, 255 },
+    .selectActive =         { 175, 175, 175, 255 },
+    .slider =               { 200, 200, 200, 255 },
+    .sliderCursor =         { 50, 50, 50, 255 },
+    .sliderCursorHover =    { 50, 50, 50, 255 },
+    .sliderCursorActive =   { 50, 50, 50, 255 },
+    .property =             { 200, 200, 200, 255 },
+    .border =               { 175, 175, 175, 255 },
+    .textFiledCursor =      { 0, 228, 48, 255 },
+    .textFiledSelection =   { 0, 117, 44, 255 },
+    .optionText =           { 200, 200, 200, 255 },
+    .optionBackground =     { 175, 175, 175, 255 },
+    .optionHover =          { 50, 50, 50, 255 },
   };
 
+  // @Dark theme
   static ImUITheme DK_ImUIDarkTheme = {
-    { 45, 45, 45, 255 },    { 235, 235, 235, 255 }, { 60, 60, 60, 255 },
-    { 75, 75, 75, 255 },    { 75, 75, 75, 255 },    { 60, 60, 60, 255 },
-    { 75, 75, 75, 255 },    { 175, 175, 175, 255 }, { 60, 60, 60, 255 },
-    { 75, 75, 75, 255 },    { 60, 60, 60, 255 },    { 175, 175, 175, 255 },
-    { 175, 175, 175, 255 }, { 175, 175, 175, 255 }, { 60, 60, 60, 255 },
-    { 75, 75, 75, 255 },    { 0, 228, 48, 255 }, // textFiledCursor
-    { 0, 117, 44, 255 },                         // textFiledSelection
-    { 60, 60, 60, 255 },    { 75, 75, 75, 255 },    { 175, 175, 175, 255 },
+    .background =           { 45, 45, 45, 255 },
+    .text =                 { 235, 235, 235, 255 },
+    .button =               { 60, 60, 60, 255 },
+    .buttonHover =          { 75, 75, 75, 255 },
+    .buttonActive =         { 75, 75, 75, 255 },
+    .toggle =               { 60, 60, 60, 255 },
+    .toggleHover =          { 75, 75, 75, 255 },
+    .toggleCursor =         { 175, 175, 175, 255 },
+    .select =               { 60, 60, 60, 255 },
+    .selectActive =         { 75, 75, 75, 255 },
+    .slider =               { 60, 60, 60, 255 },
+    .sliderCursor =         { 175, 175, 175, 255 },
+    .sliderCursorHover =    { 175, 175, 175, 255 },
+    .sliderCursorActive =   { 175, 175, 175, 255 },
+    .property =             { 60, 60, 60, 255 },
+    .border =               { 75, 75, 75, 255 },
+    .textFiledCursor =      { 0, 228, 48, 255 },
+    .textFiledSelection =   { 0, 117, 44, 255 },
+    .optionText =           { 60, 60, 60, 255 },
+    .optionBackground =     { 75, 75, 75, 255 },
+    .optionHover =          { 175, 175, 175, 255 },
   };
 
-  // monokai theme
+  // @Monokai theme
   static ImUITheme DK_ImUIMonokaiTheme = {
-    { 39, 40, 34, 255 },    { 248, 248, 242, 255 }, { 50, 50, 50, 255 },
-    { 75, 75, 75, 255 },    { 75, 75, 75, 255 },    { 50, 50, 50, 255 },
-    { 75, 75, 75, 255 },    { 175, 175, 175, 255 }, { 50, 50, 50, 255 },
-    { 75, 75, 75, 255 },    { 50, 50, 50, 255 },    { 175, 175, 175, 255 },
-    { 175, 175, 175, 255 }, { 175, 175, 175, 255 }, { 50, 50, 50, 255 },
-    { 75, 75, 75, 255 },    { 0, 228, 48, 255 }, // textFiledCursor
-    { 0, 117, 44, 255 },                         // textFiledSelection
-    { 50, 50, 50, 255 },    { 75, 75, 75, 255 },    { 175, 175, 175, 255 },
+   .background =           { 39, 40, 34, 255 },
+   .text =                 { 248, 248, 242, 255 },
+   .button =               { 50, 50, 50, 255 },
+   .buttonHover =          { 75, 75, 75, 255 },
+   .buttonActive =         { 75, 75, 75, 255 },
+   .toggle =               { 50, 50, 50, 255 },
+   .toggleHover =          { 75, 75, 75, 255 },
+   .toggleCursor =         { 175, 175, 175, 255 },
+   .select =               { 50, 50, 50, 255 },
+   .selectActive =         { 75, 75, 75, 255 },
+   .slider =               { 50, 50, 50, 255 },
+   .sliderCursor =         { 175, 175, 175, 255 },
+   .sliderCursorHover =    { 175, 175, 175, 255 },
+   .sliderCursorActive =   { 175, 175, 175, 255 },
+   .property =             { 50, 50, 50, 255 },
+   .border =               { 75, 75, 75, 255 },
+   .textFiledCursor =      { 0, 228, 48, 255 },
+   .textFiledSelection =   { 0, 117, 44, 255 },
+   .optionText =           { 50, 50, 50, 255 },
+   .optionBackground =     { 75, 75, 75, 255 },
+   .optionHover =          { 175, 175, 175, 255 },
   };
 
-  // nord theme
+  // @Nord theme
   static ImUITheme DK_ImUINordTheme = {
-    { 46, 52, 64, 255 },    { 229, 233, 240, 255 }, { 60, 56, 64, 255 },
-    { 75, 71, 79, 255 },    { 75, 71, 79, 255 },    { 60, 56, 64, 255 },
-    { 75, 71, 79, 255 },    { 175, 175, 175, 255 }, { 60, 56, 64, 255 },
-    { 75, 71, 79, 255 },    { 60, 56, 64, 255 },    { 175, 175, 175, 255 },
-    { 175, 175, 175, 255 }, { 175, 175, 175, 255 }, { 60, 56, 64, 255 },
-    { 75, 71, 79, 255 },    { 0, 228, 48, 255 }, // textFiledCursor
-    { 0, 117, 44, 255 },                         // textFiledSelection
-    { 60, 56, 64, 255 },    { 75, 71, 79, 255 },    { 175, 175, 175, 255 },
+   .background =           { 46, 52, 64, 255 },
+   .text =                 { 229, 233, 240, 255 },
+   .button =               { 60, 56, 64, 255 },
+   .buttonHover =          { 75, 71, 79, 255 },
+   .buttonActive =         { 75, 71, 79, 255 },
+   .toggle =               { 60, 56, 64, 255 },
+   .toggleHover =          { 75, 71, 79, 255 },
+   .toggleCursor =         { 175, 175, 175, 255 },
+   .select =               { 60, 56, 64, 255 },
+   .selectActive =         { 75, 71, 79, 255 },
+   .slider =               { 60, 56, 64, 255 },
+   .sliderCursor =         { 175, 175, 175, 255 },
+   .sliderCursorHover =    { 175, 175, 175, 255 },
+   .sliderCursorActive =   { 175, 175, 175, 255 },
+   .property =             { 60, 56, 64, 255 },
+   .border =               { 75, 71, 79, 255 },
+   .textFiledCursor =      { 0, 228, 48, 255 },
+   .textFiledSelection =   { 0, 117, 44, 255 },
+   .optionText =           { 60, 56, 64, 255 },
+   .optionBackground =     { 75, 71, 79, 255 },
+   .optionHover =          { 175, 175, 175, 255 },
   };
 
-  // white theme
+  // @White theme
   static ImUITheme DK_ImUIWhiteTheme = {
-    { 255, 255, 255, 255 }, { 50, 50, 50, 255 },    { 200, 200, 200, 255 },
-    { 175, 175, 175, 255 }, { 175, 175, 175, 255 }, { 200, 200, 200, 255 },
-    { 175, 175, 175, 255 }, { 50, 50, 50, 255 },    { 200, 200, 200, 255 },
-    { 175, 175, 175, 255 }, { 200, 200, 200, 255 }, { 50, 50, 50, 255 },
-    { 50, 50, 50, 255 },    { 50, 50, 50, 255 },    { 200, 200, 200, 255 },
-    { 175, 175, 175, 255 }, { 0, 228, 48, 255 }, // textFiledCursor
-    { 0, 117, 44, 255 },                         // textFiledSelection
-    { 200, 200, 200, 255 }, { 175, 175, 175, 255 }, { 50, 50, 50, 255 },
+   .background =           { 255, 255, 255, 255 },
+   .text =                 { 50, 50, 50, 255 },
+   .button =               { 200, 200, 200, 255 },
+   .buttonHover =          { 175, 175, 175, 255 },
+   .buttonActive =         { 175, 175, 175, 255 },
+   .toggle =               { 200, 200, 200, 255 },
+   .toggleHover =          { 175, 175, 175, 255 },
+   .toggleCursor =         { 50, 50, 50, 255 },
+   .select =               { 200, 200, 200, 255 },
+   .selectActive =         { 175, 175, 175, 255 },
+   .slider =               { 200, 200, 200, 255 },
+   .sliderCursor =         { 50, 50, 50, 255 },
+   .sliderCursorHover =    { 50, 50, 50, 255 },
+   .sliderCursorActive =   { 50, 50, 50, 255 },
+   .property =             { 200, 200, 200, 255 },
+   .border =               { 175, 175, 175, 255 },
+   .textFiledCursor =      { 0, 228, 48, 255 },
+   .textFiledSelection =   { 0, 117, 44, 255 },
+   .optionText =           { 200, 200, 200, 255 },
+   .optionBackground =     { 175, 175, 175, 255 },
+   .optionHover =          { 50, 50, 50, 255 },
   };
 
+  //
+  // @API function declarations
+  //
   void DK_DrawColorPicker(ImUI* io, Vector2 pos, Color* result, bool* is_open);
-
-  void DK_DrawSlider(ImUI* io,
-                     Vector2 position,
-                     float width,
-                     float height,
-                     float* value,
-                     float min,
-                     float max,
-                     float step,
-                     bool* focused);
-
-  int DK_DrawButton(ImUI* io,
-                    Vector2 position,
-                    float width,
-                    float height,
-                    const char* text);
-
-  int DK_DrawDropdown(ImUI* io,
-                      Vector2 position,
-                      float width,
-                      float height,
-                      const char* text,
-                      char** options,
-                      size_t el_size,
-                      int* selected,
-                      bool* is_open);
-
-  const char* DK_DrawInputField(ImUI* io,
-                                Vector2 position,
-                                float width,
-                                float height,
-                                char* text,
-                                bool* focused,
-                                void (*callback)(char*));
+  void DK_DrawSlider(ImUI* io, Vector2 position, float width, float height, float* value, float min, float max, float step, bool* focused);
+  int DK_DrawButton(ImUI* io, Vector2 position, float width, float height, const char* text);
+  int DK_DrawDropdown(ImUI* io, Vector2 position, float width, float height, const char* text, char** options, size_t el_size, int* selected, bool* is_open);
+  const char* DK_DrawInputField(ImUI* io, Vector2 position, float width, float height, char* text, bool* focused, void (*callback)(const char*));
 
 #if defined(DK_UI_IMPLEMENTATION)
 
@@ -554,8 +596,9 @@ extern "C"
                                 float height,
                                 char* text,
                                 bool* focused,
-                                void (*callback)(char*))
+                                void (*callback)(const char*))
   {
+    // @Color definitions from theme
     Color bgColor = Fade(io->theme->background, 0.2);
     Color borderColor = Fade(io->theme->border, 0.5);
     Color textColor = Fade(io->theme->text, 0.8);
@@ -563,13 +606,15 @@ extern "C"
     Color cursorColor = Fade(io->theme->textFiledCursor, 0.8);
     Color selectionColor = Fade(io->theme->textFiledSelection, 0.2);
 
+    // @Clickable area for @Focus
     Rectangle buttonBounds = { position.x, position.y, width, height };
 
-    static int cursorPosEnd = 0;
+    int cursorPosEnd = 0;
     static int framesCounter = 0;
     static int cursorOffset = 0;
+    static int cursorPos = 0;
 
-    // Focus on click
+    // @Focus on @Click
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
       if (CheckCollisionPointRec(GetMousePosition(), buttonBounds)) {
         *focused = true;
@@ -578,26 +623,21 @@ extern "C"
       }
     }
 
-    DrawRectangleRoundedLines(buttonBounds,
-                              io->style->roundness,
-                              1,
-                              io->style->borderSize,
-                              borderColor); // outline
-    DrawRectangleRounded(buttonBounds, io->style->roundness, 10, bgColor); // bg
+    // @Border and @Background
+    DrawRectangleRoundedLines(buttonBounds, io->style->roundness, 1, io->style->borderSize, borderColor);
+    DrawRectangleRounded(buttonBounds, io->style->roundness, 10, bgColor);
 
     if (*focused) {
       ++framesCounter;
-      DrawRectangleRounded(buttonBounds,
-                           io->style->roundness,
-                           10,
-                           activeColor); // bg
 
-      // Selection rectangle (highlighted text)
-      DrawRectangle(position.x + 8,
-                    position.y + 2.5,
-                    MeasureTextEx(*io->font, text, height, 1).x,
-                    height - 5,
-                    selectionColor);
+      // @Background for text input
+      DrawRectangleRounded(buttonBounds, io->style->roundness, 10, activeColor);
+
+      // @Selection rectangle (highlighted text)
+      Rectangle selectionReactangle = { position.x + 8, position.y + 2.5,
+                                        MeasureTextEx(*io->font, text, height, 1).x,
+                                        height - 5 };
+      DrawRectangleRec(selectionReactangle, selectionColor);
 
       int key = GetCharPressed();
       if ((key >= 32) && (key <= 125)) {
@@ -678,61 +718,86 @@ extern "C"
 
         char str[2] = { 0 };
         str[0] = (char)key;
-        strcat((char*)text, str);
+
+        memmove(&text[cursorPos + 1], &text[cursorPos], strlen(text) - cursorPos + 1);
+        text[cursorPos] = str[0];
+
+        cursorPos++;
       }
 
+      // @Cursor movement (left arrow)
+      if (IsKeyPressed(KEY_LEFT)) {
+        if (cursorPos > 0) --cursorPos;
+      }
+
+      // @Cursor movement (right arrow)
+      if (IsKeyPressed(KEY_RIGHT)) {
+        if (cursorPos < strlen(text)) ++cursorPos;
+      }
+
+      char temp[1024];
+      memcpy(temp, text, sizeof(temp));
+      temp[cursorPos] = '\0';
+      cursorPosEnd = MeasureTextEx(*io->font, temp, height, 1).x + cursorOffset;
+
+      // @Delete
       if (IsKeyPressed(KEY_BACKSPACE)) {
         int len = strlen(text);
-        if (len > 0)
-          text[len - 1] = '\0';
-      }
-
-      // key repeat on backspce
-      if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyDown(KEY_BACKSPACE)) {
-        if (framesCounter / 20 % 2) {
-          int len = strlen(text);
-          if (len > 0)
+        if (len > 0) {
+          if (cursorPos != 0) {
+            for (int i = cursorPos; i < len; i++) {
+              text[i - 1] = text[i];
+            }
             text[len - 1] = '\0';
+            cursorPos--;
+          }
         }
       }
 
-      // (CTRL+C)
+      // @Delete (key repeat on backspce)
+      if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyDown(KEY_BACKSPACE)) {
+        if (framesCounter / 20 % 2) {
+          int len = strlen(text);
+          if (len > 0) {
+            if (cursorPos != 0) {
+              for (int i = cursorPos; i < len; i++) {
+                text[i - 1] = text[i];
+              }
+              text[len - 1] = '\0';
+              cursorPos--;
+            }
+          }
+        }
+      }
+
+      // @Copy (CTRL+C)
       if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_C)) {
         SetClipboardText(text);
       }
 
-      // (CTRL+V)
+      // @Paste (CTRL+V)
       if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_V)) {
         strcat(text, GetClipboardText());
       }
 
+      // @Submit (Enter)
       if (IsKeyPressed(KEY_ENTER)) {
-        if (callback != NULL) {
-          (*callback)(text);
-        }
+        if (callback != NULL) { (*callback)(text); }
+        cursorPos = 0;
       }
     }
 
-    DrawTextEx(
-      *io->font,
-      text,
-      (Vector2){ position.x + 5, position.y + height / 2 - height / 2 },
-      height,
-      1,
-      textColor);
+    // @Text buffer drawing
+    Vector2 textPos = { position.x + 5, position.y + height / 2 - height / 2 };
+    DrawTextEx(*io->font,text, textPos, height, 1, textColor);
 
-    if (strlen(text) != 0)
-      cursorOffset = 8;
-    else
-      cursorOffset = 5;
-    cursorPosEnd = MeasureTextEx(*io->font, text, height, 1).x + cursorOffset;
+    if (strlen(text) != 0) { cursorOffset = 8; }
+    else { cursorOffset = 5; }
 
+    // @Cursor drawing (blinking animation every 20 frames)
     if (framesCounter / 20 % 2) {
-      DrawRectangle(position.x + cursorPosEnd,
-                    position.y + 2.5,
-                    10,
-                    height - 5,
-                    cursorColor);
+      Rectangle cursorRec = { position.x + cursorPosEnd, position.y + 2.5, 10, height - 5 };
+      DrawRectangleRec(cursorRec, cursorColor);
     }
 
     return text;

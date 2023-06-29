@@ -15,7 +15,7 @@ typedef struct
   char *name;
   int argc;
   char *help;
-  void (*func)(char*);
+  void (*func)(const char*);
 } DK_ExtCommand;
 
 static DK_ExtCommand* dk_commands_list = NULL;
@@ -24,7 +24,7 @@ DK_ExtCommand* DK_ExtGetCommandsList();
 
 void DK_ExtCommandInit();
 
-void DK_ExtCommandPush(char *name, int argc, char *help, void (*func)(char*));
+void DK_ExtCommandPush(char *name, int argc, char *help, void (*func)(const char*));
 
 bool DK_ExtCommandExecute(char *name, char *args);
 
@@ -44,7 +44,7 @@ void DK_ExtCommandInit()
   memset(dk_commands_list, 0, sizeof(DK_ExtCommand) * DK_COMMAND_SIZE);
 }
 
-void DK_ExtCommandPush(char *name, int argc, char *help, void (*func)(char*))
+void DK_ExtCommandPush(char *name, int argc, char *help, void (*func)(const char*))
 {
   for (int i = 0; i < DK_COMMAND_SIZE; i++)
   {
