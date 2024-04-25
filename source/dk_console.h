@@ -12,8 +12,12 @@ extern "C"
 
 #include <stdlib.h> // malloc
 
+#if defined(DK_CONSOLE_IMPLEMENTATION)
 #define DK_UI_IMPLEMENTATION
 #include "dk_ui.h"
+#else
+#include "dk_ui.h"
+#endif
 
 #if !defined(LOG_SIZE)
 #define LOG_SIZE 1080 * 1080 // size of log buffer

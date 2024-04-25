@@ -271,7 +271,7 @@ main(void)
 
   SetTargetFPS(60);
 
-  unsigned int fileSize = 0;
+  int fileSize = 0;
   unsigned char* fileData = LoadFileData("Resources/font/JetBrainsMono-Regular.ttf", &fileSize);
   int fontSize = 128;
 
